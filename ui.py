@@ -9,6 +9,7 @@
 # STUDENT ID
 
 from pathlib import Path
+from Profile import *
 
 
 def recur_dir(directory: Path):
@@ -107,6 +108,14 @@ def command_C(directory: Path, subs, filename):
         file = directory/filename_dsu
         file.touch()
         output = str(file)
+
+        username = input("Username: \n")
+        userpass = input("Pasword: \n")
+        userbio = input("Bio: \n")
+
+        user = Profile(username=username,password=userpass) # missing dsuserver input
+        user.bio = userbio
+        user.save_profile(file) # takes the file directory as input
     else:
         output = "ERROR"
     return output
@@ -184,6 +193,9 @@ def parse_input(input:str):
 
     return input_list
 
+def loadDSU(dsu_path: Path):
+    
+    pass
 
 def recieve_input(parsed_input):
     pass

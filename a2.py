@@ -20,6 +20,7 @@ def admin():
 
     usr_input = input()
     command_input, directory_input, subs, extra = parse_input(usr_input)
+    directory_input = Path(directory_input)
 
     while command_input != "Q":
         if len(usr_input) == 1:
@@ -39,7 +40,21 @@ def admin():
     
 
 def user():
-    pass
+    usr_input = input()
+    command_input, directory_input, subs, extra = parse_input(usr_input)
+    directory_input = Path(directory_input)
+    while command_input != "Q":
+        if len(usr_input) == 1:
+            print("ERROR")
+        elif command_input == "C":
+            print(command_C(directory_input, subs, extra))
+        elif command_input == "O":
+            print(loadDSU()) # in progress
+            pass
+
+        usr_input = input()
+        command_input, directory_input, subs, extra = parse_input(usr_input)
+        # C /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder -n myjournal
 
 def main():
     # did not have time to implement the multiple commands input
