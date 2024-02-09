@@ -37,7 +37,7 @@ def paths_to_strs(path_list:list):
 
     return output.strip()
 
-# NR need refactor
+
 def command_L(directory: Path, subs: list, extra_input: str):
     # input: diectory, list of sub commands, extra input
     # output: string of paths
@@ -110,7 +110,7 @@ def command_C_admin(directory: Path, subs, filename):
         output = "ERROR"
     return output
 
-# takes directory, subs, and filename NR need refactor
+
 def command_C(directory: Path, subs, filename):
     output = ""
     if "-n" in subs:
@@ -130,7 +130,7 @@ def command_C(directory: Path, subs, filename):
         output = "ERROR"
     return output, username, userpass, userbio
 
-# takes directory NNR - No need refactor
+
 def command_D(file_dir: Path):
     if file_dir.exists() and file_dir.suffix == ".dsu":
         str_file = str(file_dir)
@@ -139,7 +139,7 @@ def command_D(file_dir: Path):
     else:
         print("ERROR")
 
-#takes directory NNR
+
 def command_R(file_dir: Path):
     contents = ""
     if file_dir.suffix != ".dsu":
@@ -150,64 +150,9 @@ def command_R(file_dir: Path):
         contents = "EMPTY"
     return contents
 
-
 # INPUT PARSING FUNCTIONS
 
-def parse_input_general(input:str):
-    # L dir -r (3)
-    # L dir (2)
-    # C dir -n something (4) dir dir2 something 
-    # L dir -r -e dsu (5)
-    # L dir -r -f
-
-    input_list = []
-
-    command_letter = ""
-    dir_input = ""
-
-    allowed_subs = ["-r","-f","-s","-e","-n"]
-
-    # command letter
-    command_letter = input[0]
-
-    remaining_str = input[2:]
-    remaining_lst = remaining_str.split() # a list of subsections without the first letter
-
-    subs = list(filter(lambda s: s in allowed_subs, remaining_lst))
-
-
-    for i in range(len(remaining_lst)):
-        try:
-            check = remaining_lst[i] + " " + remaining_lst[i+1]
-            if Path(check).exists():
-                dir_input = check
-                remaining_lst.remove(remaining_lst[i+1])
-                remaining_lst.remove(remaining_lst[i])
-            elif remaining_lst[i] in subs:
-                remaining_lst.remove(remaining_lst[i])
-            else:
-                dir_input = remaining_lst[0]
-                remaining_lst.remove(dir_input)
-        except:
-            for sub in remaining_lst:
-                if sub in subs:
-                    remaining_lst.remove(sub)
-
-    remain = "".join(remaining_lst)
-    if Path(remain).exists() and dir_input == "": # last edge case 
-        dir_input = remain
-        remain = ""
-        
-    # finalize
-    input_list.append(command_letter)
-    input_list.append(dir_input)
-    input_list.append(subs)
-    input_list.append(remain)      
-
-    return input_list
-
-
-def parse_input_edit(o_input:str):
+def parse_input_general(o_input:str):
     # input: String o_input
     # output: List tuples matching sub with sub input
 
@@ -229,7 +174,7 @@ def parse_input_edit(o_input:str):
     dir_input = o_input.split("-")[0]
     dir_input = "".join(dir_input).strip()
 
-    allowed_subs = ["-usr", "-pwd", "-bio", "-addpost", "-delpost", "-r","-f","-s","-e","-n"]
+    allowed_subs = ["-usr", "-pwd", "-bio", "-addpost", "-delpost", "-r","-f","-s","-e","-n", "-posts", "-post", "-all"]
     allowed_subs_stripped = list(map(lambda d: d[1:], allowed_subs)) # commands without "-"
 
     subs = list(filter(lambda i: i in allowed_subs, o_input.split())) # getting all the commands
@@ -251,7 +196,7 @@ def parse_input_edit(o_input:str):
 
 def parse_inputs(user_input:str):
     allowed_general = ["-r","-f","-s","-e","-n"]
-    allowed_o = ["-usr", "-pwd", "-bio", "-addpost", "-delpost"]
+    allowed_o = ["-usr", "-pwd", "-bio", "-addpost", "-delpost", "-posts", "-post", "-all"]
 
     in_general = list(map(lambda d: d in user_input, allowed_general))
     in_allowed_o = list(map(lambda d: d in user_input, allowed_o))
@@ -259,7 +204,7 @@ def parse_inputs(user_input:str):
     
     if True in in_general:
         # converst to old format --> can be refactored but not enough time
-        parsing_list = parse_input_edit(user_input)
+        parsing_list = parse_input_general(user_input)
         tup_list = parsing_list[2]
 
         subs = list(map(lambda d: d[0], tup_list)) # working
@@ -268,9 +213,9 @@ def parse_inputs(user_input:str):
         parsed_list = [parsing_list[0], parsing_list[1], subs, extra_input]
 
     elif True in in_allowed_o:
-        parsed_list = parse_input_edit(user_input)
+        parsed_list = parse_input_general(user_input)
     else:
-        parsed_list = parse_input_edit(user_input)[:-1]
+        parsed_list = parse_input_general(user_input)[:-1]
         pass # do whatever else
     return parsed_list
 
@@ -306,28 +251,70 @@ def edit_by_command(tup:tuple, userprofile: Profile):
         # edit the password part of the loaded list
         userprofile.password = new
         print("password edited to: ", new)
-    elif sub == "bio":
+    elif sub == "-bio":
         # edit the bio part of the loaded list
         userprofile.bio = new
         print("bio edited to: ", new)
     elif sub == "-addpost":
         # add a post to dsu file
+        post = Post(new)
+        userprofile.add_post(post)
         # userprofile.add_post()
         pass
     elif sub == "-delpost": 
         # deete a file from dsu file based on index
-        pass
+        try:
+            index = int(new)
+            userprofile.del_post(index)
+        except:
+            print("Delete post not completed.")
+            pass
 
 
-def editDSU(tup_list: list, userprofile: Profile):
+def editDSU(tup_list: list, DSU_path: Path, userprofile: Profile):
     # can editDSU only if the file is loaded by C or O command -> i.e the file exists
     # either one command at a time or multiple
     for tup in tup_list:
         # run the edit command
         edit_by_command(tup, userprofile)
-        print("Username: ", userprofile.username, " Password: ", userprofile.password," Bio: ", userprofile.bio, " Posts: ", userprofile._posts)
+    userprofile.save_profile(DSU_path)
+    print("Username: ", userprofile.username, " Password: ", userprofile.password," Bio: ", userprofile.bio, " Posts: ", userprofile._posts)
     
 
     # input: Path DSU
     # output: Str message of updated things
 
+def get_user_info(tup: tuple, userprofile: Profile):
+    output = ""
+    sub = tup[0]
+    try:
+        sub_input = int(tup[1])
+    except:
+        pass
+
+    all_commands = ["-usr", "-pwd", "-bio", "-posts"]
+
+    if sub == "-usr":
+        output += "Username: " + userprofile.username + "\n"
+    elif sub == "-pwd":
+        output += "Password " + userprofile.password + "\n"
+    elif sub == "-bio":
+        output += "Bio: " + userprofile.bio + "\n"
+    elif sub == "-post":
+        output += str(userprofile.get_posts()[sub_input].get_entry()) + "\n"
+    elif sub == "-posts":
+        for i in range(len(userprofile.get_posts())):
+            output += str(i) + ": " + str(userprofile.get_posts()[i].get_entry()) + "\n"
+    elif sub == "-all":
+        for cmd in all_commands:
+            output += get_user_info((cmd,""),userprofile)
+    return output
+
+
+def command_P(tup_list: list, userprofile: Profile):
+    # input: String P + commands
+    # output: string with requested information
+    output = ""
+    for tup in tup_list:
+        output += get_user_info(tup, userprofile)
+    return output
