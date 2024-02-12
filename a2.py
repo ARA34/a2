@@ -43,7 +43,8 @@ def admin():
 
 def user():
     # refactor code into list of tuples
-    usr_input = input()
+
+    usr_input = print_user_options() # beginning options
     parsed_user_input = parse_inputs(usr_input)
     command_input = parsed_user_input[0]
     user_profile = Profile(username=None, password=None)
@@ -52,9 +53,7 @@ def user():
 
 
     while command_input != "Q":
-        if len(usr_input) == 1:
-            print("ERROR")
-        elif command_input == "C":
+        if command_input == "C":
             directory_input = parsed_user_input[1] 
             directory_input = Path(directory_input)
             subs, extra = parsed_user_input[2:] # may be wrong
@@ -64,6 +63,40 @@ def user():
             user_profile.bio = command_c[3]
             profile_loaded = True # potential error(s)
             # C /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder -n myjournal1
+
+            # profile is created -> edit or print
+            nested_usr_input = print_user_options_2() 
+            n_parsed_input = parse_inputs(nested_usr_input)
+            command_input = n_parsed_input[0]
+
+            if command_input == "E": # edit information once DSU file opened
+                # remove the directory form input only leave part with subs and sub inputs
+
+                # C /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder -n myjournal
+                # O /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder/myjournal.dsu
+                # E -usr Reese -pwd thisisnewpassword
+                # print(command_input, directory_input, subs, extra)
+
+                tup_list = n_parsed_input[2]
+                print(f"This is parsed: {n_parsed_input}")
+                if profile_loaded:
+                    directory_input = str(directory_input)
+                    directory_input += "/"+extra +".dsu"
+                    print(f"This is directory: {directory_input}")
+                    directory_input = Path(directory_input)
+
+        
+                    editDSU(tup_list, directory_input, user_profile) # TODO:not working
+                else:
+                    print("There is no profile loaded, please run C or O command.")
+            elif command_input == "P":
+                # print requested contents
+                tup_list = parsed_user_input[2]
+                if profile_loaded:
+                    print(command_P(tup_list, user_profile))
+                else:
+                    print("There is no profile loaded, please run C or O command.")
+
         elif command_input == "O":
             try:
                 directory_input = parsed_user_input[1] 
@@ -73,28 +106,34 @@ def user():
             except:
                 print("Something went wrong. Profile not loaded.")
 
-        elif command_input == "E": # edit information once DSU file opened
-            # remove the directory form input only leave part with subs and sub inputs
 
-            # C /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder -n myjournal
-            # O /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder/myjournal.dsu
-            # E -usr Reese -pwd thisisnewpassword
-            # print(command_input, directory_input, subs, extra)
-            tup_list = parsed_user_input[2]
-            if profile_loaded:
-                editDSU(tup_list, directory_input, user_profile)
-            else:
-                print("There is no profile loaded, please run C or O command.")
-        elif command_input == "P":
-            # print requested contents
-            tup_list = parsed_user_input[2]
-            if profile_loaded:
-                print(command_P(tup_list, user_profile))
-            else:
-                print("There is no profile loaded, please run C or O command.")
+            # profile is loaded -> edit or print
 
+            usr_input = print_user_options_2()
+            parsed_user_input = parse_inputs(usr_input)
+            command_input = parsed_user_input[0]
+            print(parsed_user_input)
+            if command_input == "E": # edit information once DSU file opened
+                # remove the directory form input only leave part with subs and sub inputs
 
-        usr_input = input()
+                # C /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder -n myjournal
+                # O /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder/myjournal.dsu
+                # E -usr Reese -pwd thisisnewpassword
+                # print(command_input, directory_input, subs, extra)
+                tup_list = parsed_user_input[2]
+                if profile_loaded:
+                    editDSU(tup_list, directory_input, user_profile)
+                else:
+                    print("There is no profile loaded, please run C or O command.")
+            elif command_input == "P":
+                # print requested contents
+                tup_list = parsed_user_input[2]
+                if profile_loaded:
+                    print(command_P(tup_list, user_profile))
+                else:
+                    print("There is no profile loaded, please run C or O command.")
+
+        usr_input = print_user_options() # beginning options
         parsed_user_input = parse_inputs(usr_input)
         command_input = parsed_user_input[0]
         # C /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder -n myjournal

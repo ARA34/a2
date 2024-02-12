@@ -216,7 +216,6 @@ def parse_inputs(user_input:str):
         parsed_list = parse_input_general(user_input)
     else:
         parsed_list = parse_input_general(user_input)[:-1]
-        pass # do whatever else
     return parsed_list
 
 
@@ -260,7 +259,6 @@ def edit_by_command(tup:tuple, userprofile: Profile):
         post = Post(new)
         userprofile.add_post(post)
         # userprofile.add_post()
-        pass
     elif sub == "-delpost": 
         # deete a file from dsu file based on index
         try:
@@ -318,3 +316,65 @@ def command_P(tup_list: list, userprofile: Profile):
     for tup in tup_list:
         output += get_user_info(tup, userprofile)
     return output
+
+def print_user_options():
+    # input: various strs
+    # output: long str to parse
+    output_str = ""
+    cmd_letter = str(input("Welcome! Do you want to create or load a DSU file (type 'C' to create or 'O' to load): \n")) # can also enter admin
+    output_str += cmd_letter + " "
+    action = ""
+    if cmd_letter == "admin":
+        # TODO: what it do here?
+        return
+    elif cmd_letter == "C":
+        dir_input = str(input("Great! What is the name of the directory you want to create in:"))
+        output_str += dir_input + " "
+        sub_input = input("Please enter '-n' in order to specify your filename:")
+        output_str += sub_input + " "
+        filename = input("What is the name of the file you would like to create:")
+        output_str += filename
+
+    elif cmd_letter == "O":
+        dir_input = str(input("Great! What is the name of the file you want to load?"))
+        output_str += dir_input + " "
+
+    return output_str
+
+def print_user_options_2():
+
+    # edit or load
+    print("You have created or loaded a file!\n")
+    output_str = ""
+    cmd_letter = input("Do you want to edit or print contents of a file (type 'E' to edit or 'P' to print contents):")
+    output_str += cmd_letter + " "
+    sub_menu_inputs = ""
+    if cmd_letter == "E":
+        print_edit_cmds()
+        sub_input = input("Enter a sub input ('Q' for escape sub input menu):")
+        while sub_input != "Q":
+
+            sub_menu_inputs += sub_input + " "
+            sub_menu_input = input("Enter new information:")
+            sub_menu_inputs += sub_menu_input + " "
+
+            sub_input = input("Enter a sub input ('Q' for escape sub input menu):")
+    elif cmd_letter == "P":
+        pass
+
+    output_str += sub_menu_inputs[:-1]
+    print(f"This is output_str: {output_str}")
+
+    return output_str
+
+def print_edit_cmds():
+    print("Now you will be entering edit commands their respective inputs (For no input just enter return):")
+    print("'-usr' - Edit username.")
+    print("'-pwd' - Edit password.")
+    print("'-bio' - Edit Bio.")
+    print("'-addpost' - Add a Post.")
+    print("'-delpost' - Delete a post.")
+
+
+def print_all_user_options():
+    pass
