@@ -56,7 +56,7 @@ def user():
     else:
         command_input = parsed_user_input[0]
     #parsed_user_input = parse_inputs(usr_input)
-    command_input = parsed_user_input[0]
+    # command_input = parsed_user_input[0]
     user_profile = Profile(username=None, password=None)
     profile_loaded = False
 
@@ -78,7 +78,6 @@ def user():
             # profile is created -> edit or print
             nested_usr_input = print_user_options_2() 
             n_parsed_input = parse_inputs(nested_usr_input)
-            print(f"This is parsed input: {n_parsed_input}")
             command_input = n_parsed_input[0]
 
             if command_input == "E": # edit information once DSU file opened
@@ -113,7 +112,7 @@ def user():
 
         elif command_input == "O": # other route, if loaded
             try:
-                directory_input = parsed_user_input[1] 
+                directory_input = parsed_user_input[1]
                 directory_input = Path(directory_input)
                 user_profile = loadDSU(directory_input)
                 profile_loaded = True
@@ -148,7 +147,7 @@ def user():
 
         usr_input = print_user_options() # beginning options
         parsed_user_input = parse_inputs(usr_input)
-        
+    
         if usr_input == "admin":
             command_input = admin()
         else:

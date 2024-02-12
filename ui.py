@@ -41,7 +41,7 @@ def paths_to_strs(path_list:list):
 def command_L(directory: Path, subs: list, extra_input: str):
     # input: diectory, list of sub commands, extra input
     # output: string of paths
-    output = []
+    output = ""
     iter_paths = []
 
     allowed_ext = [".dsu", ".py",".txt"]
@@ -97,6 +97,33 @@ def command_L(directory: Path, subs: list, extra_input: str):
     else:
         output = "ERROR"
     return output
+
+
+# def small_L(tup, directory_path:Path):
+#     output = ""
+#     # -r, -f, -e, -s
+#     iterpaths = []
+#     sub = tup[0]
+#     new = tup[1]
+#     allowed_ext = [".dsu", ".py", ".txt"]
+#     for path in directory_path.iterdir():
+#         iterpaths.append(path)
+
+#     if sub == "":
+#         # just iterpaths
+#         for path in directory_path.iterdir():
+#             iterpaths.append(path)
+#     elif sub == "-r":
+#         pass
+
+#     output += paths_to_strs(iterpaths)
+#     return output
+
+# def parse_L(tup_list:list, directory:Path):
+#     output = ""
+#     for tup in tup_list:
+#         output += parse_L(tup, directory)
+#     return output
 
 
 def command_C_admin(directory: Path, subs, filename):
