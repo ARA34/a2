@@ -350,31 +350,45 @@ def print_user_options_2():
     output_str += cmd_letter + " "
     sub_menu_inputs = ""
     if cmd_letter == "E":
-        print_edit_cmds()
-        sub_input = input("Enter a sub input ('Q' for escape sub input menu):")
-        while sub_input != "Q":
-
-            sub_menu_inputs += sub_input + " "
-            sub_menu_input = input("Enter new information:")
-            sub_menu_inputs += sub_menu_input + " "
-
-            sub_input = input("Enter a sub input ('Q' for escape sub input menu):")
+        print_edit_cmds() # for editing
+        sub_menu_inputs += take_sub_inputs()
     elif cmd_letter == "P":
-        pass
+        print_cmds() # for printing
+        sub_menu_inputs += take_sub_inputs()
 
     output_str += sub_menu_inputs[:-1]
     print(f"This is output_str: {output_str}")
-
     return output_str
 
+def take_sub_inputs():
+    sub_menu_inputs = ""
+    sub_input = input("Enter a sub input ('Q' for escape sub input menu):")
+    while sub_input != "Q":
+        sub_menu_inputs += sub_input + " "
+        sub_menu_input = input("Enter new information:")
+        sub_menu_inputs += sub_menu_input + " "
+
+        sub_input = input("Enter a sub input ('Q' for escape sub input menu):")
+    return sub_menu_inputs
+
+
 def print_edit_cmds():
-    print("Now you will be entering edit commands their respective inputs (For no input just enter return):")
+    print("Now you will be entering edit commands and their respective inputs (for no input enter return):")
     print("'-usr' - Edit username.")
     print("'-pwd' - Edit password.")
-    print("'-bio' - Edit Bio.")
-    print("'-addpost' - Add a Post.")
+    print("'-bio' - Edit bio.")
+    print("'-addpost' - Add a post.")
     print("'-delpost' - Delete a post.")
 
+
+def print_cmds():
+    print("Now you will be entering print commands and their respective inputs (for no input enter return):")
+    print("'-usr' - Print username.")
+    print("'-pwd' - Print password.")
+    print("'-bio' - Print bio.")
+    print("'-post' - Print post based on ID.")
+    print("'-posts' - Print all posts.")
+    print("'-all' - Print all information.")
 
 def print_all_user_options():
     pass
