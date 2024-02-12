@@ -150,7 +150,6 @@ def command_R(file_dir: Path):
         contents = "EMPTY"
     return contents
 
-# INPUT PARSING FUNCTIONS
 
 def parse_input_general(o_input:str):
     # input: String o_input
@@ -208,8 +207,11 @@ def parse_inputs(user_input:str):
         tup_list = parsing_list[2]
 
         subs = list(map(lambda d: d[0], tup_list)) # working
-        extra_input = list(map(lambda s: s[1], tup_list))
-        extra_input = list(filter(lambda s: s != "", extra_input))[0]
+        try:
+            extra_input = list(map(lambda s: s[1], tup_list))
+            extra_input = list(filter(lambda s: s != "", extra_input))[0]
+        except:
+            extra_input = ""
         parsed_list = [parsing_list[0], parsing_list[1], subs, extra_input]
 
     elif True in in_allowed_o:
@@ -282,6 +284,7 @@ def editDSU(tup_list: list, DSU_path: Path, userprofile: Profile):
     # input: Path DSU
     # output: Str message of updated things
 
+
 def get_user_info(tup: tuple, userprofile: Profile):
     output = ""
     sub = tup[0]
@@ -317,16 +320,15 @@ def command_P(tup_list: list, userprofile: Profile):
         output += get_user_info(tup, userprofile)
     return output
 
+
 def print_user_options():
     # input: various strs
     # output: long str to parse
     output_str = ""
     cmd_letter = str(input("Welcome! Do you want to create or load a DSU file (type 'C' to create or 'O' to load): \n")) # can also enter admin
     output_str += cmd_letter + " "
-    action = ""
-    if cmd_letter == "admin":
-        # TODO: what it do here?
-        return
+    if cmd_letter.strip() == "admin":
+       return "admin"
     elif cmd_letter == "C":
         dir_input = str(input("Great! What is the name of the directory you want to create in:"))
         output_str += dir_input + " "
@@ -338,8 +340,13 @@ def print_user_options():
     elif cmd_letter == "O":
         dir_input = str(input("Great! What is the name of the file you want to load?"))
         output_str += dir_input + " "
+    elif cmd_letter == "Q":
+        output_str += "Q"
+    else:
+        print("invalid statement, please try again.")
 
     return output_str
+
 
 def print_user_options_2():
 
@@ -359,6 +366,7 @@ def print_user_options_2():
     output_str += sub_menu_inputs[:-1]
     print(f"This is output_str: {output_str}")
     return output_str
+
 
 def take_sub_inputs():
     sub_menu_inputs = ""
@@ -390,5 +398,3 @@ def print_cmds():
     print("'-posts' - Print all posts.")
     print("'-all' - Print all information.")
 
-def print_all_user_options():
-    pass

@@ -19,14 +19,16 @@ from ui import *
 
 
 def admin():
+    print("You are now in admin mode: Refer to the README for instructions.")
 
     usr_input = input()
-    command_input, directory_input, subs, extra = parse_input_general(usr_input)
-    directory_input = Path(directory_input)
+    parsed_input = parse_inputs(usr_input)
+    command_input = parsed_input[0] # str
 
     while command_input != "Q":
-        if len(usr_input) == 1:
-            print("ERROR")
+        directory_input = parsed_input[1] 
+        subs = parsed_input[2]
+        extra = parsed_input[3]
         directory_path = Path(directory_input)
         if command_input == "L":
             print(command_L(directory_path, subs, extra))
@@ -38,17 +40,26 @@ def admin():
             print(command_R(directory_path))
 
         usr_input = input()
-        command_input, directory_input, subs, extra = parse_input_general(usr_input)
+        parsed_input = parse_inputs(usr_input)
+        command_input = parsed_input[0]
+    return "Q"
     
 
 def user():
     # refactor code into list of tuples
 
     usr_input = print_user_options() # beginning options
+
     parsed_user_input = parse_inputs(usr_input)
+    if usr_input == "admin":
+        command_input = admin()
+    else:
+        command_input = parsed_user_input[0]
+    #parsed_user_input = parse_inputs(usr_input)
     command_input = parsed_user_input[0]
     user_profile = Profile(username=None, password=None)
     profile_loaded = False
+
     #directory_input = ""
 
 
@@ -67,7 +78,7 @@ def user():
             # profile is created -> edit or print
             nested_usr_input = print_user_options_2() 
             n_parsed_input = parse_inputs(nested_usr_input)
-            print(f"Thi is parsed input: {n_parsed_input}")
+            print(f"This is parsed input: {n_parsed_input}")
             command_input = n_parsed_input[0]
 
             if command_input == "E": # edit information once DSU file opened
@@ -137,21 +148,29 @@ def user():
 
         usr_input = print_user_options() # beginning options
         parsed_user_input = parse_inputs(usr_input)
-        command_input = parsed_user_input[0]
+        
+        if usr_input == "admin":
+            command_input = admin()
+        else:
+            command_input = parsed_user_input[0]
+
         user_profile = Profile(username=None, password=None)
         profile_loaded = False
         # C /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder -n myjournal
 
 def main():
     # did not have time to implement the multiple commands input
-    print("Enter 'admin' or 'user'.\n")
-    usr_input = input().lower()
+    user()
 
-    if usr_input == "admin":
-        admin() # run admin command
-    elif usr_input == "user":
-        user()
-        # run other command
+
+    # print("Enter 'admin' or 'user'.\n")
+    # usr_input = input().lower()
+
+    # if usr_input == "admin":
+    #     admin() # run admin command
+    # elif usr_input == "user":
+    #     user()
+    #     # run other command
         
 
 if __name__ == "__main__":
