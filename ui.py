@@ -98,6 +98,7 @@ def command_L(directory: Path, subs: list, extra_input: str):
         output = "ERROR"
     return output
 
+
 def command_L_new(directory:Path, list_tups:list):
     #output: string converted from list of paths
     output = []
@@ -114,6 +115,7 @@ def get_iter_paths(dir:Path) -> list:
     for path in dir.iterdir():
         output.append(path)
     return output
+
 
 def small_L(tup, dir:Path, p_list:list) -> list:
     # input: tup and directory_path
@@ -158,17 +160,9 @@ def small_L(tup, dir:Path, p_list:list) -> list:
     return output
 
 
-
-
-
-def parse_L(tup_list:list, directory:Path):
-    output = ""
-    for tup in tup_list:
-        output += parse_L(tup, directory)
-    return output
-
-
-def command_C_admin(directory: Path, subs, filename):
+def command_C_admin(directory: Path, tup_list:list):
+    subs = tup_list[0][0]
+    filename = tup_list[0][1]
     output = ""
     if "-n" in subs:
         filename_dsu = filename + ".dsu"
@@ -181,6 +175,7 @@ def command_C_admin(directory: Path, subs, filename):
 
 
 def command_C(directory: Path, subs, filename):
+
     output = ""
     if "-n" in subs:
         filename_dsu = filename + ".dsu"

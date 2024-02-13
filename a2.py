@@ -24,11 +24,6 @@ def admin():
     usr_input = input()
     # parsed_input = parse_inputs(usr_input)
     parsed_input = parse_input_general(usr_input)
-    print(f"Most general: {parsed_input}")
-
-
-
-
 
     command_input = parsed_input[0] # str
 
@@ -37,19 +32,19 @@ def admin():
         directory_input = parsed_input[1] 
         # subs = parsed_input[2]
         # extra = parsed_input[3]
-
-        tup_list = parsed_input[2]
         directory_path = Path(directory_input)
 
         if command_input == "L":
             # print(command_L(directory_path, subs, extra))
+            tup_list = parsed_input[2]
             print(command_L_new(directory_path, tup_list))
-        # elif command_input == "C":
-        #     print(command_C_admin(directory_path, subs, extra))
-        # elif command_input == "D":
-        #     command_D(directory_path)
-        # elif command_input == "R":
-        #     print(command_R(directory_path))
+        elif command_input == "C":
+            tup_list = parsed_input[2]
+            print(command_C_admin(directory_path, tup_list))
+        elif command_input == "D":
+            command_D(directory_path)
+        elif command_input == "R":
+            print(command_R(directory_path))
 
         usr_input = input()
         # parsed_input = parse_inputs(usr_input)
@@ -100,11 +95,9 @@ def user():
                 # print(command_input, directory_input, subs, extra)
 
                 tup_list = n_parsed_input[2]
-                print(f"This is parsed: {n_parsed_input}")
                 if profile_loaded:
                     directory_input = str(directory_input)
                     directory_input += "/"+extra +".dsu"
-                    print(f"This is directory: {directory_input}")
                     directory_input = Path(directory_input)
 
         
