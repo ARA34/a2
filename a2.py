@@ -22,25 +22,38 @@ def admin():
     print("You are now in admin mode: Refer to the README for instructions.")
 
     usr_input = input()
-    parsed_input = parse_inputs(usr_input)
+    # parsed_input = parse_inputs(usr_input)
+    parsed_input = parse_input_general(usr_input)
+    print(f"Most general: {parsed_input}")
+
+
+
+
+
     command_input = parsed_input[0] # str
 
     while command_input != "Q":
+
         directory_input = parsed_input[1] 
-        subs = parsed_input[2]
-        extra = parsed_input[3]
+        # subs = parsed_input[2]
+        # extra = parsed_input[3]
+
+        tup_list = parsed_input[2]
         directory_path = Path(directory_input)
+
         if command_input == "L":
-            print(command_L(directory_path, subs, extra))
-        elif command_input == "C":
-            print(command_C_admin(directory_path, subs, extra))
-        elif command_input == "D":
-            command_D(directory_path)
-        elif command_input == "R":
-            print(command_R(directory_path))
+            # print(command_L(directory_path, subs, extra))
+            print(command_L_new(directory_path, tup_list))
+        # elif command_input == "C":
+        #     print(command_C_admin(directory_path, subs, extra))
+        # elif command_input == "D":
+        #     command_D(directory_path)
+        # elif command_input == "R":
+        #     print(command_R(directory_path))
 
         usr_input = input()
-        parsed_input = parse_inputs(usr_input)
+        # parsed_input = parse_inputs(usr_input)
+        parsed_input = parse_input_general(usr_input)
         command_input = parsed_input[0]
     return "Q"
     
@@ -55,12 +68,10 @@ def user():
         command_input = admin()
     else:
         command_input = parsed_user_input[0]
-    #parsed_user_input = parse_inputs(usr_input)
-    # command_input = parsed_user_input[0]
+
+
     user_profile = Profile(username=None, password=None)
     profile_loaded = False
-
-    #directory_input = ""
 
 
     while command_input != "Q":

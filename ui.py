@@ -98,32 +98,74 @@ def command_L(directory: Path, subs: list, extra_input: str):
         output = "ERROR"
     return output
 
+def command_L_new(directory:Path, list_tups:list):
+    #output: string converted from list of paths
+    output = []
+    for tup in list_tups:
+        output = small_L(tup, directory, output)
 
-# def small_L(tup, directory_path:Path):
-#     output = ""
-#     # -r, -f, -e, -s
-#     iterpaths = []
-#     sub = tup[0]
-#     new = tup[1]
-#     allowed_ext = [".dsu", ".py", ".txt"]
-#     for path in directory_path.iterdir():
-#         iterpaths.append(path)
+    return paths_to_strs(output)
+    
 
-#     if sub == "":
-#         # just iterpaths
-#         for path in directory_path.iterdir():
-#             iterpaths.append(path)
-#     elif sub == "-r":
-#         pass
+def get_iter_paths(dir:Path) -> list:
+    # input: Path directory
+    # output: list of paths
+    output = []
+    for path in dir.iterdir():
+        output.append(path)
+    return output
 
-#     output += paths_to_strs(iterpaths)
-#     return output
+def small_L(tup, dir:Path, p_list:list) -> list:
+    # input: tup and directory_path
+    # output: list of paths
+    output = []
+    # -r, -f, -e, -s
+    sub = tup[0]
+    new = tup[1]
+    allowed_ext = [".dsu", ".py", ".txt"]
 
-# def parse_L(tup_list:list, directory:Path):
-#     output = ""
-#     for tup in tup_list:
-#         output += parse_L(tup, directory)
-#     return output
+    if len(p_list) == 0:
+        p_list = get_iter_paths(dir)
+        # can recurisve or 
+        if sub == "-r":
+            output = recur_dir(dir)
+        elif sub == "":
+            output = p_list
+        elif sub == "-f":
+            output = list(filter(lambda p: p.is_file(), p_list))
+        elif sub == "-e":
+            if "."+new in allowed_ext:
+                output = list(filter(lambda p: p.suffix == "." + new, p_list))
+            else:
+                print("Not the right extension")
+        elif sub == "-s":
+            output = list(filter(lambda p: p.name == new, p_list))
+        else:
+            print("idk what went wrong - first time")
+    else:
+        # there is an input coming beforehand
+        if sub == "-f":
+            output = list(filter(lambda p: p.is_file(), p_list))
+        elif sub == "-e":
+            if "."+new in allowed_ext:
+                output = list(filter(lambda p: p.suffix == "." + new, p_list))
+            else:
+                print("Not the right extension")
+        elif sub == "-s":
+            output = list(filter(lambda p: p.name == new, p_list))
+        else:
+            print("idk what went wrong -> not first time")
+    return output
+
+
+
+
+
+def parse_L(tup_list:list, directory:Path):
+    output = ""
+    for tup in tup_list:
+        output += parse_L(tup, directory)
+    return output
 
 
 def command_C_admin(directory: Path, subs, filename):
@@ -233,7 +275,7 @@ def parse_inputs(user_input:str):
         parsing_list = parse_input_general(user_input)
         tup_list = parsing_list[2]
 
-        subs = list(map(lambda d: d[0], tup_list)) # working
+        subs = list(map(lambda d: d[0], tup_list))
         try:
             extra_input = list(map(lambda s: s[1], tup_list))
             extra_input = list(filter(lambda s: s != "", extra_input))[0]
