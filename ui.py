@@ -4,7 +4,7 @@
 
 # Alex Reyes Aranda
 # areyesar@uci.edu
-# STUDENT ID
+# 69754988
 
 from pathlib import Path
 from Profile import *
@@ -39,8 +39,7 @@ def paths_to_strs(path_list:list):
 
 
 def command_L(directory: Path, subs: list, extra_input: str):
-    # input: diectory, list of sub commands, extra input
-    # output: string of paths
+    # CURRENTLY NOT BEING USED [OLD]
     output = ""
     iter_paths = []
 
@@ -127,8 +126,7 @@ def small_L(tup, dir:Path, p_list:list) -> list:
     allowed_ext = [".dsu", ".py", ".txt"]
 
     if len(p_list) == 0:
-        p_list = get_iter_paths(dir)
-        # can recurisve or 
+        p_list = get_iter_paths(dir) 
         if sub == "-r":
             output = recur_dir(dir)
         elif sub == "":
@@ -136,27 +134,26 @@ def small_L(tup, dir:Path, p_list:list) -> list:
         elif sub == "-f":
             output = list(filter(lambda p: p.is_file(), p_list))
         elif sub == "-e":
-            if "."+new in allowed_ext:
+            if "." + new in allowed_ext:
                 output = list(filter(lambda p: p.suffix == "." + new, p_list))
             else:
                 print("Not the right extension")
         elif sub == "-s":
             output = list(filter(lambda p: p.name == new, p_list))
         else:
-            print("idk what went wrong - first time")
+            print("ERROR - First iteration")
     else:
-        # there is an input coming beforehand
         if sub == "-f":
             output = list(filter(lambda p: p.is_file(), p_list))
         elif sub == "-e":
-            if "."+new in allowed_ext:
+            if "." + new in allowed_ext:
                 output = list(filter(lambda p: p.suffix == "." + new, p_list))
             else:
                 print("Not the right extension")
         elif sub == "-s":
             output = list(filter(lambda p: p.name == new, p_list))
         else:
-            print("idk what went wrong -> not first time")
+            print("ERROR - Later iteration")
     return output
 
 
@@ -218,20 +215,7 @@ def command_R(file_dir: Path):
 def parse_input_general(o_input:str):
     # input: String o_input
     # output: List tuples matching sub with sub input
-
-    # O dir -usr Reese -pwd 4321
-    # C dir -n myjournal
-    
-    # Walkthrough:
-    # input: -usr Reese R -pwd 4321
-    # usr, Reese R, pwd, 4321
-    # usrReeseRpwd4321
-    # usr, Reese, R pwd 4321
-    # _, Reese R, _ 4321
-    # _ 
     parsed_list = []
-
-
     command_letter = o_input[0]
     o_input = o_input[2:]
     dir_input = o_input.split("-")[0]
@@ -329,14 +313,9 @@ def editDSU(tup_list: list, DSU_path: Path, userprofile: Profile):
     # can editDSU only if the file is loaded by C or O command -> i.e the file exists
     # either one command at a time or multiple
     for tup in tup_list:
-        # run the edit command
         edit_by_command(tup, userprofile)
     userprofile.save_profile(DSU_path)
     print("Username: ", userprofile.username, " Password: ", userprofile.password," Bio: ", userprofile.bio, " Posts: ", userprofile._posts)
-    
-
-    # input: Path DSU
-    # output: Str message of updated things
 
 
 def get_user_info(tup: tuple, userprofile: Profile):
@@ -409,8 +388,6 @@ def print_user_options():
 
 
 def print_user_options_2():
-
-    # edit or load
     print("You have created or loaded a file!\n")
     output_str = ""
     cmd_letter = input("Do you want to edit or print contents of a file (type 'E' to edit or 'P' to print contents):\n")
@@ -434,7 +411,6 @@ def take_sub_inputs():
         sub_menu_inputs += sub_input + " "
         sub_menu_input = input("Addtional Input:")
         sub_menu_inputs += sub_menu_input + " "
-
         sub_input = input("Enter a sub input ('Q' for escape sub input menu):\n")
     return sub_menu_inputs
 
