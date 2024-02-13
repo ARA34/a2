@@ -293,15 +293,6 @@ def loadDSU(dsu_path: Path):
     return profile_to_load
     
 
-def save_note(note: str, p: Path):
-    # check if storage file exists, if not create it.
-    
-    # open and write user note to file
-    f = p.open('a')
-    f.write(note + '\n')
-    f.close()
-
-
 def edit_by_command(tup:tuple, userprofile: Profile):
     # load the saved information onto a list
     # assume the file is loaded
@@ -311,15 +302,15 @@ def edit_by_command(tup:tuple, userprofile: Profile):
     if sub == "-usr":
         # edit the username part of the loaded list
         userprofile.username = new
-        print("username edited to: ", new)
+        print("username edited to: ", new,"\n")
     elif sub == "-pwd":
         # edit the password part of the loaded list
         userprofile.password = new
-        print("password edited to: ", new)
+        print("password edited to: ", new, "\n")
     elif sub == "-bio":
         # edit the bio part of the loaded list
         userprofile.bio = new
-        print("bio edited to: ", new)
+        print("bio edited to: ", new,"\n")
     elif sub == "-addpost":
         # add a post to dsu file
         post = Post(new)
@@ -332,7 +323,6 @@ def edit_by_command(tup:tuple, userprofile: Profile):
             userprofile.del_post(index)
         except:
             print("Delete post not completed.")
-            pass
 
 
 def editDSU(tup_list: list, DSU_path: Path, userprofile: Profile):
@@ -366,10 +356,16 @@ def get_user_info(tup: tuple, userprofile: Profile):
     elif sub == "-bio":
         output += "Bio: " + userprofile.bio + "\n"
     elif sub == "-post":
-        output += str(userprofile.get_posts()[sub_input].get_entry()) + "\n"
+        if len(userprofile.get_posts()) != 0:
+            output += str(userprofile.get_posts()[sub_input].get_entry()) + "\n"
+        else:
+            output += "No Posts."
     elif sub == "-posts":
-        for i in range(len(userprofile.get_posts())):
-            output += str(i) + ": " + str(userprofile.get_posts()[i].get_entry()) + "\n"
+        if len(userprofile.get_posts()) != 0:
+            for i in range(len(userprofile.get_posts())):
+                output += str(i) + ": " + str(userprofile.get_posts()[i].get_entry()) + "\n"
+        else:
+            output += "No Posts."
     elif sub == "-all":
         for cmd in all_commands:
             output += get_user_info((cmd,""),userprofile)
@@ -394,15 +390,15 @@ def print_user_options():
     if cmd_letter.strip() == "admin":
        return "admin"
     elif cmd_letter == "C":
-        dir_input = str(input("Great! What is the name of the directory you want to create in:"))
+        dir_input = str(input("Great! What is the name of the directory you want to create in:\n"))
         output_str += dir_input + " "
-        sub_input = input("Please enter '-n' in order to specify your filename:")
+        sub_input = input("Please enter '-n' in order to specify your filename:\n")
         output_str += sub_input + " "
-        filename = input("What is the name of the file you would like to create:")
+        filename = input("What is the name of the file you would like to create:\n")
         output_str += filename
 
     elif cmd_letter == "O":
-        dir_input = str(input("Great! What is the name of the file you want to load?"))
+        dir_input = str(input("Great! What is the name of the file you want to load?\n"))
         output_str += dir_input + " "
     elif cmd_letter == "Q":
         output_str += "Q"
@@ -417,7 +413,7 @@ def print_user_options_2():
     # edit or load
     print("You have created or loaded a file!\n")
     output_str = ""
-    cmd_letter = input("Do you want to edit or print contents of a file (type 'E' to edit or 'P' to print contents):")
+    cmd_letter = input("Do you want to edit or print contents of a file (type 'E' to edit or 'P' to print contents):\n")
     output_str += cmd_letter + " "
     sub_menu_inputs = ""
     if cmd_letter == "E":
@@ -428,19 +424,18 @@ def print_user_options_2():
         sub_menu_inputs += take_sub_inputs()
 
     output_str += sub_menu_inputs[:-1]
-    print(f"This is output_str: {output_str}")
     return output_str
 
 
 def take_sub_inputs():
     sub_menu_inputs = ""
-    sub_input = input("Enter a sub input ('Q' for escape sub input menu):")
+    sub_input = input("Enter a sub input ('Q' for escape sub input menu):\n")
     while sub_input != "Q":
         sub_menu_inputs += sub_input + " "
-        sub_menu_input = input("Enter new information:")
+        sub_menu_input = input("Addtional Input:")
         sub_menu_inputs += sub_menu_input + " "
 
-        sub_input = input("Enter a sub input ('Q' for escape sub input menu):")
+        sub_input = input("Enter a sub input ('Q' for escape sub input menu):\n")
     return sub_menu_inputs
 
 

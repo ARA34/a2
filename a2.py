@@ -2,17 +2,10 @@
 
 # Starter code for assignment 2 in ICS 32 Programming with Software Libraries in Python
 
-# Replace the following placeholders with your information.
-
 # Alex Reyes Aranda
 # areyesar@uci.edu
 # STUDENT ID
 
-# TODO:
-# implement admin mode - still kinda iffy idk how they want us to integrate this...
-# Stylecheck Profile.py
-# Finish editDSU function
-# refactor the admin function to include the new type of parsed inputs
 
 from pathlib import Path
 from ui import *
@@ -162,19 +155,7 @@ def user():
         # C /Users/alexra/Documents/UCI_WINTER_2023/ICS_32/test_folder -n myjournal
 
 def main():
-    # did not have time to implement the multiple commands input
     user()
-
-
-    # print("Enter 'admin' or 'user'.\n")
-    # usr_input = input().lower()
-
-    # if usr_input == "admin":
-    #     admin() # run admin command
-    # elif usr_input == "user":
-    #     user()
-    #     # run other command
-        
 
 if __name__ == "__main__":
     main()
